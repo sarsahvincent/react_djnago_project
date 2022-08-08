@@ -10,19 +10,20 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [authTokens, setAuthTokens] = useState(() =>
+  const [user, setUser] = useState(() =>
     localStorage.getItem("tokens")
       ? jwt_decode(localStorage.getItem("tokens"))
       : null
   );
-  const [user, setUser] = useState(() =>
-    localStorage.getItem("tokens")
-      ? JSON.parse(localStorage.getItem("tokens"))
-      : null
+
+  const [authTokens, setAuthTokens] = useState(() =>
+  localStorage.getItem("tokens")
+  ? JSON.parse(localStorage.getItem("tokens"))
+  : null
   );
+  console.log("authTokens", authTokens);
   async function getUser(e) {
     e.preventDefault();
-
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/token/", {
         username: e.target.username.value,
@@ -51,12 +52,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateToken = async (e) => {
-    console.log("update token called");
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/token/refresh/",
         {
-          refresh: authTokens.refresh,
+          refresh: authTokens?.refresh,
         }
       );
       if (response.status === 200) {
@@ -69,16 +69,24 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       logoutUser();
     }
+
+    if (loading) {
+      setLoading(false);
+    }
   };
 
   let contextData = {
     user,
+    authTokens,
     loginUser: getUser,
     logoutUser,
     updateToken,
   };
 
   useEffect(() => {
+    if (loading) {
+      updateToken();
+    }
     let fourMinutes = 100 * 60 * 4;
     let interval = setInterval(() => {
       if (authTokens) {
@@ -89,6 +97,8 @@ export const AuthProvider = ({ children }) => {
   }, [authTokens, loading]);
 
   return (
-    <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={contextData}>
+      {loading ? null : children}
+    </AuthContext.Provider>
   );
 };
