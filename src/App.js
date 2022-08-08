@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./utils/PrivateRoute";
+import Header from "./components/Header";
+import Note from "./pages/note/Note";
+import SimpleJWTHome from "./pages/simple_jwt/HomePage";
+import SimpleJWTLoign from "./pages/simple_jwt/LoginPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route exact path="/" element={<SimpleJWTHome />} />
+          </Route>
+          <Route path="/login" element={<SimpleJWTLoign />} />
+          <Route path="/note" element={<Note />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 }
 

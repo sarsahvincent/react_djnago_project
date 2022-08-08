@@ -1,38 +1,45 @@
-.App {
-  text-align: center;
+.noteList {
+  height: 85vh;
+  overflow-y: scroll; /* Hide vertical scrollbar */
+  padding-bottom: 20px;
+}
+.noteList {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.noteList::-webkit-scrollbar {
+  display: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.posts:hover {
+  transform: scale(1.05);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.posts {
+  width: 455px;
+  max-width: 500px;
+}
+label {
+  color: "rgb(7,43,80)";
+  font-weight: 600;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+input,
+textarea {
+  border-radius: 10px;
+  border: 1px solid rgb(7, 43, 80);
+  padding: 5px;
+  font-size: 16px;
+}
+input:focus {
+  border: none;
 }
 
-.App-link {
-  color: #61dafb;
+.form {
+  width: 50%;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media (max-width: 600px) {
+  .form {
+    width: 80%;
   }
 }
